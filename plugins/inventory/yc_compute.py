@@ -27,7 +27,7 @@ DOCUMENTATION = r'''
         description: The type of credential used.
         required: true
         type: string
-        choices: ['oauth', 'serviceaccountfile']
+        choices: ['oauth', 'serviceaccountfile', 'computemetadata']
         env:
           - name: YC_ANSIBLE_AUTH_KIND
       oauth_token:
@@ -263,6 +263,8 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
             if not oauth_token:
                 raise AnsibleError('oauth_token should be set')
             self.sdk = yandexcloud.SDK(interceptor=interceptor, token=oauth_token)
+        elif auth_kind == 'computemetadata':
+            self.sdk = yandexcloud.SDK(interceptor=interceptor)
         else:
             raise AnsibleError('Unknown value for auth_kind: {0}'.format(auth_kind))
 
